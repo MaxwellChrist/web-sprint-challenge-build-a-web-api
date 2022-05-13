@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
     .then(result => {
         res.json(result)
     })
-
 })
 
 

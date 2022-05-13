@@ -6,25 +6,6 @@ function projectsLogger (req, res, next) {
     next();
 }
 
-// function projectsIdChecker (req, res, next) {
-//     console.log(req.params.id)
-//     const id = req.params.id
-//     Projects.get(id)
-//     .then(result => {
-//         if (!result) {
-
-//             res.status(404).json({ message: "No project ID found" })
-//         } else {
-//             req.params = result;
-//             next();
-//         }
-//     })
-//     .catch(result => {
-//         console.log(result)
-//         res.status(500).json({ message: "Error retrieving ID of project" })
-//     })
-// }
-
 function projectsIdChecker (req, res, next) {
     console.log(req.params.id)
     const id = req.params.id

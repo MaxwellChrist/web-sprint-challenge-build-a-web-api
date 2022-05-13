@@ -1,5 +1,3 @@
-// Write your "projects" router here!
-
 const express = require('express');
 const Projects = require('./projects-model');
 const { projectsLogger, projectsIdChecker, projectsValidater } = require('./projects-middleware');
@@ -8,7 +6,6 @@ const router = express.Router();
 router.use(projectsLogger)
 
 router.get('/', (req, res) => {
-    console.log(`the request is : ${req.body}`)
     Projects.get()
     .then(result => {
         if (result.length == 0) {
@@ -22,31 +19,11 @@ router.get('/', (req, res) => {
     })
 })
 
-// router.get('/:id', (req, res) => {
-//     const id = req.params.id
-//     Projects.get(id)
-//     .then(result => {
-//         if (!result) {
-//             res.status(404).json({ message: "No ID action found" })
-//         } else {
-//             res.json(result) 
-//         }
-//     })
-// })
-
-// router.get('/:id', projectsIdChecker, (req, res) => {
-//     console.log(req.params);
-//     req.body = req.params;
-//     res.json(req.body);
-// })
-
 router.get('/:id', projectsIdChecker, (req, res) => {
     res.json(req.params);
 })
 
-
 router.post('/', projectsValidater, (req, res) => {
-    console.log(req.body);
     Projects.insert(req.body)
     .then(result => {
         res.json(result)
@@ -74,6 +51,28 @@ router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
             res.status(500).json({ message: "Error updating project" })
         })
     }
+})
+
+router.delete('/:id', projectsIdChecker, (req, res) => {
+    const id = req.params.id;
+    Projects.remove(id)
+    .then(result =>{
+        res.json(result)
+    })
+    .catch(result =>{
+        res.status(500).json({ message: "Cannot complete delete request; no ID found"})
+    })
+})
+
+router.get('/:id/actions', (req, res) => {
+    const id = req.params.id;
+    Projects.getProjectActions(id)
+    .then(result => {
+        res.json(result)
+    })
+    .catch(result => {
+        res.status(500).json({ message: "Cannot complete get request; no project action found"})
+    })
 })
 
 module.exports = router;

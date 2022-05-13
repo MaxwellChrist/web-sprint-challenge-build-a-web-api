@@ -2,22 +2,10 @@
 
 const express = require('express');
 const Projects = require('./projects-model');
-const { projectsLogger } = require('./projects-middleware');
+const { projectsLogger, projectsIdChecker, projectsValidater } = require('./projects-middleware');
 
 const router = express.Router();
 router.use(projectsLogger)
-
-// router.get('/', projectsLogger, (req, res) => {
-//     console.log(`${req.body.projects}\n${req.body.p}`)
-//     Projects.get()
-//     .then(result => {
-//         if (result) {
-//             res.json([]);
-//         } else {
-//             res.json(req.query)
-//         }
-//     })
-// })
 
 router.get('/', (req, res) => {
     console.log(`the request is : ${req.body}`)
@@ -25,18 +13,38 @@ router.get('/', (req, res) => {
     .then(result => {
         res.json(result)
     })
-
+    .catch(result => {
+        res.status(500).json({ message: "Error retrieving projects" })
+    })
 })
 
-router.get('/:id', (req, res) => {
-    const id = req.params.id
-    Projects.get(id)
+// router.get('/:id', (req, res) => {
+//     const id = req.params.id
+//     Projects.get(id)
+//     .then(result => {
+//         if (!result) {
+//             res.status(404).json({ message: "No ID action found" })
+//         } else {
+//             res.json(result) 
+//         }
+//     })
+// })
+
+router.get('/:id', projectsIdChecker, (req, res) => {
+    console.log(req.params);
+    req.body = req.params;
+    res.json(req.body);
+})
+
+
+router.post('/', projectsValidater, (req, res) => {
+    console.log(req.body);
+    Projects.insert(req.body)
     .then(result => {
-        if (!result) {
-            res.status(404).json({ message: "No ID action found" })
-        } else {
-            res.json(result) 
-        }
+        res.json(result)
+    })
+    .catch(result => {
+        res.status(500).json({ message: "Error updating projects with post request" })
     })
 })
 

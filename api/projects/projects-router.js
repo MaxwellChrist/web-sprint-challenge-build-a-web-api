@@ -57,18 +57,23 @@ router.post('/', projectsValidater, (req, res) => {
 })
 
 router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
-    const projectsUpdate = {
-        name: req.body.name,
-        description: req.body.description,
-        completed: req.body.completed
+    const completed = req.body.completed;
+    if (completed == null) {
+        res.status(400).json({ message: "Missing name and/or description field"})
+    } else {
+        const projectsUpdate = {
+            name: req.body.name,
+            description: req.body.description,
+            completed: req.body.completed
+        }
+        Projects.update(req.params.id, projectsUpdate)
+        .then(result => {
+            res.json(result)
+        })
+        .catch(result => {
+            res.status(500).json({ message: "Error updating project" })
+        })
     }
-    Projects.update(req.params.id, projectsUpdate)
-    .then(result => {
-        res.json(result)
-    })
-    .catch(result => {
-        res.status(500).json({ message: "Error updating project" })
-    })
 })
 
 module.exports = router;

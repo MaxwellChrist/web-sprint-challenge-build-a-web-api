@@ -11,7 +11,11 @@ router.get('/', (req, res) => {
     console.log(`the request is : ${req.body}`)
     Projects.get()
     .then(result => {
-        res.json(result)
+        if (result.length == 0) {
+            res.json([]);
+        } else {
+            res.json(result)
+        }
     })
     .catch(result => {
         res.status(500).json({ message: "Error retrieving projects" })
@@ -30,10 +34,14 @@ router.get('/', (req, res) => {
 //     })
 // })
 
+// router.get('/:id', projectsIdChecker, (req, res) => {
+//     console.log(req.params);
+//     req.body = req.params;
+//     res.json(req.body);
+// })
+
 router.get('/:id', projectsIdChecker, (req, res) => {
-    console.log(req.params);
-    req.body = req.params;
-    res.json(req.body);
+    res.json(req.project);
 })
 
 
@@ -44,7 +52,24 @@ router.post('/', projectsValidater, (req, res) => {
         res.json(result)
     })
     .catch(result => {
-        res.status(500).json({ message: "Error updating projects with post request" })
+        res.status(500).json({ message: "Error creating new project" })
+    })
+})
+
+router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
+    const projectsUpdate = {
+        name: req.body.name,
+        description: req.body.description,
+        id: req.params.id,
+        completed: req.body.completed
+    }
+    Projects.update(req.params.id, projectsUpdate)
+    .then(result => {
+        result.completed = true;
+        res.json(result)
+    })
+    .catch(result => {
+        res.status(500).json({ message: "Error updating project" })
     })
 })
 

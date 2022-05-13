@@ -11,7 +11,7 @@ function actionsUserId(req, res, next) {
     Actions.get(id)
     .then(result => {
       if (id) {
-        req.body = result;
+        req.project = result;
         next();
       } else {
         res.status(404).json({ message: "Action ID not found" })

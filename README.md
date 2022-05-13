@@ -147,7 +147,17 @@ We have provided test data for all the resources.
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics. You might prepare by writing down your own answers before hand.
 
 1. The core features of Node.js and Express and why they are useful.
+- Some of the core features of Node is that it is written in JavaScript, so understanding code from the client or the server is much easier. Also because it is written in JavaScript on the backend, it gives us access to the npm repository. This allows one programming with node to have access to a large variety of libraries.
+- Some of the core features of Express include it being simpler API that is also lightweight, sitting on top of Node. This makes building web applications easier and allows applications to run quickly
+
 1. Understand and explain the use of Middleware.
+- Middleware is basically the list of functions that send back more middleware or a response back to the client. The use of them is important since each middleware gets access to the request and response of the client, making versatility of commands very useful such as logging what the request body includes, security, etc.
+
 1. The basic principles of the REST architectural style.
+- These principles are that everything you interact with is a resource, and each of these resources has a URI or Uniform Resource Identifier. Each of these resources can have multiple representations and the communication of these resources is done over HTTP. Therefore, management of these resources is done with HTTP methods.
+
 1. Understand and explain the use of Express Routers.
+- They are an express application within the express application. It's a way we can set up a request handler function that executes based on the URL and HTTP method used, which then helps separate and organize the application into multiple routes and middleware
+
 1. Describe tooling used to manually test the correctness of an API.
+- These include applications such as postman and httpie. I personally like using postman the most and it helps test the correctness manually by manually selecting data you will be sending to the API, such as the URL and HTTP method used.

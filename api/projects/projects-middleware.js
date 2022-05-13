@@ -11,7 +11,7 @@ function projectsIdChecker (req, res, next) {
     Projects.get(id)
     .then(result => {
         if (!result) {
-            res.status(404).json({ message: "No ID action found" })
+            res.status(404).json({ message: "No project ID found" })
         } else {
             res.json(result) 
         }
@@ -22,7 +22,6 @@ function projectsIdChecker (req, res, next) {
 }
 
 function projectsValidater (req, res, next) {
-    console.log(req.body)
     const name = req.body.name;
     const description = req.body.description;
     if (typeof name != "string" || name == "" || typeof description != "string" || description == "") {

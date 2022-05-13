@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 // })
 
 router.get('/:id', projectsIdChecker, (req, res) => {
-    res.json(req.project);
+    res.json(req.params);
 })
 
 
@@ -60,12 +60,10 @@ router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
     const projectsUpdate = {
         name: req.body.name,
         description: req.body.description,
-        id: req.params.id,
         completed: req.body.completed
     }
     Projects.update(req.params.id, projectsUpdate)
     .then(result => {
-        result.completed = true;
         res.json(result)
     })
     .catch(result => {

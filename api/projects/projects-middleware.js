@@ -13,7 +13,8 @@ function projectsIdChecker (req, res, next) {
         if (!result) {
             res.status(404).json({ message: "No project ID found" })
         } else {
-            res.json(result) 
+            req.params = result;
+            next();
         }
     })
     .catch(result => {

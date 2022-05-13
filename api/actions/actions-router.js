@@ -16,9 +16,22 @@ router.get('/', (req, res) => {
 })
 
 
-router.get('/:id', actionsUserId, (req, res) => {
-    res.json(res.body)
+// router.get('/:id', actionsUserId, (req, res) => {
+//     res.json(res.body)
+// })
+
+router.get('/:id', (req, res) => {
+    const id = req.params.id
+    Actions.get(id)
+    .then(result => {
+        if (!result) {
+            res.status(404).json({ message: "No ID action found" })
+        } else {
+            res.json(result) 
+        }
+    })
 })
+
 
 
 module.exports = router;

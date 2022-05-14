@@ -8,7 +8,6 @@ const router = express.Router();
 router.use(actionsLogger)
 
 router.get('/', (req, res) => {
-    console.log(`the request is : ${req.body}`)
     Actions.get()
     .then(result => {
         res.json(result)
@@ -32,6 +31,29 @@ router.post('/', actionsValidater, (req, res) => {
     })
 })
 
-//npm i, reset database => use these commands on knex migrate:latest && knex seed:run
+router.put('/:id', actionsIdChecker, actionsValidater, (req, res) => {
+    const completed = req.body.completed;
+    if (completed == null || typeof completed != "boolean") {
+        res.status(400).json({ message: "Missing completed field"})
+    } else {
+        Actions.update(req.params.id, req.body)
+        .then(result => {
+            res.json(result)
+        })   
+        .catch(result => {
+            res.status(500).json({ message: ""})
+        }) 
+    }
+})
+
+router.delete('/:id', actionsIdChecker, (req, res) => {
+    Actions.remove(req.params.id)
+    .then(result => {
+        res.json(result)
+    })
+    .catch(result =>{
+        res.status(500).json({ message: "Cannot complete delete request; no ID found"})
+    })
+})
 
 module.exports = router;

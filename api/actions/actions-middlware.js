@@ -18,13 +18,11 @@ function actionsIdChecker (req, res, next) {
       }
   })
   .catch(result => {
-      console.log(result)
       res.status(500).json({ message: "Error retrieving ID of project" })
   })
 }
 
 function actionsValidater(req, res, next) {
-  console.log(req.body)
   const project_id = req.body.project_id;
   const description = req.body.description;
   const notes = req.body.notes;

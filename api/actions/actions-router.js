@@ -2,7 +2,7 @@
 // Write your "actions" router here!
 const express = require('express');
 const Actions = require('./actions-model');
-const { actionsLogger, actionsUserId } = require('./actions-middlware');
+const { actionsLogger, actionsIdChecker, actionsValidater } = require('./actions-middlware');
 
 const router = express.Router();
 router.use(actionsLogger)
@@ -13,32 +13,25 @@ router.get('/', (req, res) => {
     .then(result => {
         res.json(result)
     })
-})
-
-
-// router.get('/:id', actionsUserId, (req, res) => {
-//     res.json(res.body)
-// })
-
-router.get('/:id', (req, res) => {
-    const id = req.params.id
-    Actions.get(id)
-    .then(result => {
-        if (!result) {
-            res.status(404).json({ message: "No ID action found" })
-        } else {
-            res.json(result) 
-        }
+    .catch(result => {
+        res.status(500).json({ message: "Error completing request to get actions"})
     })
 })
 
-// router.post('/', (req, res) => {
-//     Actions.insert(req.body)
-//     .then(result => {
+router.get('/:id', actionsIdChecker, (req, res) => {
+    res.json(req.params)
+})
 
-//     })
-// })
+router.post('/', actionsValidater, (req, res) => {
+    Actions.insert(req.body)
+    .then(result => {
+        res.json(result)
+    })
+    .catch(result => {
+        res.status(500).json({ message: "Error completing request to post actions"})
+    })
+})
 
-
+//npm i, reset database => use these commands on knex migrate:latest && knex seed:run
 
 module.exports = router;

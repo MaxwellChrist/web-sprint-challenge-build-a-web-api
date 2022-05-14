@@ -35,15 +35,10 @@ router.post('/', projectsValidater, (req, res) => {
 
 router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
     const completed = req.body.completed;
-    if (completed == null) {
-        res.status(400).json({ message: "Missing name and/or description field"})
+    if (completed == null || typeof completed != "boolean") {
+        res.status(400).json({ message: "Missing completed field"})
     } else {
-        const projectsUpdate = {
-            name: req.body.name,
-            description: req.body.description,
-            completed: req.body.completed
-        }
-        Projects.update(req.params.id, projectsUpdate)
+        Projects.update(req.params.id, req.body)
         .then(result => {
             res.json(result)
         })
@@ -64,7 +59,7 @@ router.delete('/:id', projectsIdChecker, (req, res) => {
     })
 })
 
-router.get('/:id/actions', (req, res) => {
+router.get('/:id/actions', projectsIdChecker, (req, res) => {
     const id = req.params.id;
     Projects.getProjectActions(id)
     .then(result => {

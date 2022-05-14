@@ -6,20 +6,39 @@ function actionsLogger (req, res, next) {
     next();
 }
 
-function actionsUserId(req, res, next) {
-    id = req.params.id
-    Actions.get(id)
-    .then(result => {
-      if (id) {
-        req.project = result;
-        next();
+function actionsIdChecker (req, res, next) {
+  const id = req.params.id
+  Actions.get(id)
+  .then(result => {
+      if (!result) {
+          res.status(404).json({ message: "No project ID found" })
       } else {
-        res.status(404).json({ message: "Action ID not found" })
-        return;
+          req.params= result;
+          next();
       }
-    })
-  }
+  })
+  .catch(result => {
+      console.log(result)
+      res.status(500).json({ message: "Error retrieving ID of project" })
+  })
+}
+
+function actionsValidater(req, res, next) {
+  console.log(req.body)
+  const project_id = req.body.project_id;
+  const description = req.body.description;
+  const notes = req.body.notes;
+  if (
+    typeof description != "string" || description.trim() === "" || 
+    typeof notes != "string" || notes.trim() === "" || 
+    typeof project_id != "number" || !project_id
+    ) {
+    res.status(400).json({ message: "Missing description and/or note field and/or invalid project ID"})
+    } else {
+      next()
+    }
+}
 
 module.exports = {
-    actionsLogger, actionsUserId
+    actionsLogger, actionsIdChecker, actionsValidater
 }

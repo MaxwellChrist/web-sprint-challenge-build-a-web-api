@@ -7,14 +7,13 @@ function projectsLogger (req, res, next) {
 }
 
 function projectsIdChecker (req, res, next) {
-    console.log(req.params.id)
     const id = req.params.id
     Projects.get(id)
     .then(result => {
         if (!result) {
             res.status(404).json({ message: "No project ID found" })
         } else {
-            req.params = result;
+            req.params= result;
             next();
         }
     })
@@ -27,7 +26,7 @@ function projectsIdChecker (req, res, next) {
 function projectsValidater (req, res, next) {
     const name = req.body.name;
     const description = req.body.description;
-    if (typeof name != "string" || name.trim() === "" || typeof description != "string" || description.trim() === "" || !name || !description) {
+    if (typeof name != "string" || name.trim() === "" || typeof description != "string" || description.trim() === "") {
         res.status(400).json({ message: "Missing name and/or description field"})
     } else {
         next();

@@ -17,24 +17,23 @@ function actionsIdChecker (req, res, next) {
           next();
       }
   })
-  .catch(result => {
-      res.status(500).json({ message: "Error retrieving ID of project" })
-  })
 }
 
 function actionsValidater(req, res, next) {
   const project_id = req.body.project_id;
   const description = req.body.description;
   const notes = req.body.notes;
+  const completed = req.body.completed;
   if (
-    typeof description != "string" || description.trim() === "" || 
-    typeof notes != "string" || notes.trim() === "" || 
-    typeof project_id != "number" || !project_id
-    ) {
-    res.status(400).json({ message: "Missing description and/or note field and/or invalid project ID"})
-    } else {
+  typeof description != "string" || description.trim() === "" || 
+  typeof notes != "string" || notes.trim() === "" || 
+  typeof project_id != "number" || !project_id ||
+  completed == null || typeof completed != "boolean"
+  ) {
+    res.status(400).json({ message: "Error with description, note field, project ID or completed field(s)" })
+  } else {
       next()
-    }
+  }
 }
 
 module.exports = {

@@ -32,18 +32,13 @@ router.post('/', actionsValidater, (req, res) => {
 })
 
 router.put('/:id', actionsIdChecker, actionsValidater, (req, res) => {
-    const completed = req.body.completed;
-    if (completed == null || typeof completed != "boolean") {
-        res.status(400).json({ message: "Missing completed field"})
-    } else {
-        Actions.update(req.params.id, req.body)
-        .then(result => {
-            res.json(result)
-        })   
-        .catch(result => {
-            res.status(500).json({ message: ""})
-        }) 
-    }
+    Actions.update(req.params.id, req.body)
+    .then(result => {
+        res.json(result)
+    })   
+    .catch(result => {
+        res.status(500).json({ message: ""})
+    }) 
 })
 
 router.delete('/:id', actionsIdChecker, (req, res) => {

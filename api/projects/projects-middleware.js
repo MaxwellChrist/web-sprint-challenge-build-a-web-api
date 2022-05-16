@@ -17,17 +17,18 @@ function projectsIdChecker (req, res, next) {
             next();
         }
     })
-    .catch(result => {
-        console.log(result)
-        res.status(500).json({ message: "Error retrieving ID of project" })
-    })
 }
 
 function projectsValidater (req, res, next) {
     const name = req.body.name;
     const description = req.body.description;
-    if (typeof name != "string" || name.trim() === "" || typeof description != "string" || description.trim() === "") {
-        res.status(400).json({ message: "Missing name and/or description field"})
+    const completed = req.body.completed;
+    if (
+    typeof name != "string" || name.trim() === "" || 
+    typeof description != "string" || description.trim() === "" ||
+    completed == null || typeof completed != "boolean")
+    {
+        res.status(400).json({ message: "Error with name, description, or completed field(s)" })
     } else {
         next();
     }

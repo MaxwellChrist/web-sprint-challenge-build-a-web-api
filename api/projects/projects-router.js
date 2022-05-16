@@ -34,18 +34,13 @@ router.post('/', projectsValidater, (req, res) => {
 })
 
 router.put('/:id', projectsIdChecker, projectsValidater, (req, res) => {
-    const completed = req.body.completed;
-    if (completed == null || typeof completed != "boolean") {
-        res.status(400).json({ message: "Missing completed field"})
-    } else {
-        Projects.update(req.params.id, req.body)
-        .then(result => {
-            res.json(result)
-        })
-        .catch(result => {
-            res.status(500).json({ message: "Error updating project" })
-        })
-    }
+    Projects.update(req.params.id, req.body)
+    .then(result => {
+        res.json(result)
+    })
+    .catch(result => {
+        res.status(500).json({ message: "Error updating project" })
+    })
 })
 
 router.delete('/:id', projectsIdChecker, (req, res) => {

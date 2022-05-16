@@ -17,6 +17,9 @@ function projectsIdChecker (req, res, next) {
             next();
         }
     })
+    .catch(result =>{
+        res.status(500).json({ message: "Cannot complete request; no ID found"})
+    })
 }
 
 function projectsValidater (req, res, next) {

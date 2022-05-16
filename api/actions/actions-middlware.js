@@ -17,6 +17,9 @@ function actionsIdChecker (req, res, next) {
           next();
       }
   })
+  .catch(result =>{
+    res.status(500).json({ message: "Cannot complete request; no ID found"})
+  })
 }
 
 function actionsValidater(req, res, next) {
